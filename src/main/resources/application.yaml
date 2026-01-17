@@ -1,3 +1,23 @@
 spring:
   application:
-    name: BlogSystem
+    name: Blog-System
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+
+  # temparary local db for developement purposes
+  # Google cloud sql will be used during the deployment
+  datasource:
+    url: jdbc:mysql://localhost:3306/BLOG
+    username: myuser
+    password: secret
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  security:
+    user:
+      name: boot
+      password: spring
