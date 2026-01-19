@@ -1,6 +1,6 @@
 package com.project.BlogSystem.auth.repository;
 
-import com.project.BlogSystem.auth.model.entity.User;
+import com.project.BlogSystem.auth.model.entity.AuthUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -18,10 +18,10 @@ existsByEmail(String email): Checks if a user with the given email exists.
 */
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<User> findByUsername(String username);
+public interface AuthUserRepository extends JpaRepository<AuthUser, Long> {
+    Optional<AuthUser> findByUsername(String username);
 
-    Optional<User> findByEmail(String email);
+    Optional<AuthUser> findByEmail(String email);
 
     boolean existsByUsername(String username);
 

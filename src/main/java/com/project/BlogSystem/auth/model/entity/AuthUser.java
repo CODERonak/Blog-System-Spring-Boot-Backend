@@ -1,5 +1,9 @@
 package com.project.BlogSystem.auth.model.entity;
 
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.CreationTimestamp;
+
 import com.project.BlogSystem.auth.model.enums.Role;
 
 import jakarta.persistence.*;
@@ -21,7 +25,7 @@ Anotations include @Entity, @Table, @Data, @AllArgsConstructor, @NoArgsConstruct
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class User {
+public class AuthUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,4 +43,9 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
+
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
 }
