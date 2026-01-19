@@ -21,3 +21,7 @@ spring:
     user:
       name: boot
       password: spring
+
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: ${JWT_EXPIRATION}
