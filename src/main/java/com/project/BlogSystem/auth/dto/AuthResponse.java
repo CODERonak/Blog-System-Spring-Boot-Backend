@@ -1,4 +1,4 @@
-package com.project.BlogSystem.auth.dto.response;
+package com.project.BlogSystem.auth.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

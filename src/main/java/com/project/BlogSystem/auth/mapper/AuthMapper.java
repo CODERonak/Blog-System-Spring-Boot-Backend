@@ -1,7 +1,7 @@
 package com.project.BlogSystem.auth.mapper;
 
-import com.project.BlogSystem.auth.dto.request.RegisterRequest;
-import com.project.BlogSystem.auth.dto.response.AuthResponse;
+import com.project.BlogSystem.auth.dto.AuthResponse;
+import com.project.BlogSystem.auth.dto.RegisterRequest;
 import com.project.BlogSystem.auth.model.entity.AuthUser;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
