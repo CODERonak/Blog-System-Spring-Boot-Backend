@@ -50,7 +50,10 @@ public class SecurityConfig {
         http
                 // authorizes request
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/auth/**")
+                        .requestMatchers(
+                            "/auth/**",
+                            "/profile/{username}"
+                        )
                         .permitAll()
                         .anyRequest().authenticated())
 

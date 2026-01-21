@@ -11,13 +11,16 @@ import org.springframework.stereotype.Service;
 import com.project.BlogSystem.auth.dto.AuthResponse;
 import com.project.BlogSystem.auth.dto.LoginRequest;
 import com.project.BlogSystem.auth.dto.RegisterRequest;
+import com.project.BlogSystem.auth.exceptions.EmailAlreadyExistsException;
 import com.project.BlogSystem.auth.exceptions.InvalidCredentialsException;
 import com.project.BlogSystem.auth.exceptions.UsernameAlreadyExistsException;
 import com.project.BlogSystem.auth.mapper.AuthMapper;
 import com.project.BlogSystem.auth.model.entity.AuthUser;
+import com.project.BlogSystem.auth.model.enums.Role;
 import com.project.BlogSystem.auth.repository.AuthUserRepository;
 import com.project.BlogSystem.auth.security.jwt.JWTUtil;
 import com.project.BlogSystem.auth.service.interfaces.AuthService;
+import com.project.BlogSystem.profile.service.interfaces.ProfileService;
 
 import lombok.AllArgsConstructor;
 
@@ -39,6 +42,7 @@ public class AuthServiceImpl implements AuthService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final JWTUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
+    private final ProfileService profileService;
 
     @Override
     public AuthResponse registerUser(RegisterRequest registerRequest) {
@@ -47,12 +51,18 @@ public class AuthServiceImpl implements AuthService {
             throw new UsernameAlreadyExistsException("Username already exists, use another one");
 
         if (authUserRepository.existsByEmail(registerRequest.getEmail()))
-            throw new UsernameAlreadyExistsException("Email already exists, use another one");
+            throw new EmailAlreadyExistsException("Email already exists, use another one");
+
+        if ((registerRequest.getRole().equals("ADMIN"))
+                && (authUserRepository.existsByRole(Role.ADMIN)))
+            throw new UsernameAlreadyExistsException("An admin account already exists. Only one ADMIN is permitted.");
 
         AuthUser user = authMapper.registerRequestToUser(registerRequest);
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
 
         authUserRepository.save(user);
+
+        profileService.createProfile(user);
 
         String jwtToken = jwtUtil.generateToken(registerRequest.getUsername());
 
@@ -83,5 +93,4 @@ public class AuthServiceImpl implements AuthService {
             throw new InvalidCredentialsException("Invalid username or password");
         }
     }
-
 }
