@@ -11,10 +11,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class PostResponse {
     private String title;
-    
+
     private String content;
 
     private LocalDateTime creationDate;
 
     private ProfileResponse author;
+
+    private String imageUrl;
 }

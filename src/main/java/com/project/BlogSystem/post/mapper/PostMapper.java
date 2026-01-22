@@ -15,13 +15,15 @@ public interface PostMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "creationDate", ignore = true)
     @Mapping(target = "author", ignore = true)
+    @Mapping(target = "imageUrl", ignore = true)
     Post postRequestToPost(PostRequest postRequest);
 
     PostResponse postToPostResponse(Post post);
-    
+
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "creationDate", ignore = true)
     @Mapping(target = "author", ignore = true)
+    @Mapping(target = "imageUrl", ignore = true)
     void updatePostRequestToPost(PostRequest postRequest, @MappingTarget Post post);
 
 }

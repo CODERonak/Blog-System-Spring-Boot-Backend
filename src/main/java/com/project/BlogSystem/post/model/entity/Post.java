@@ -46,6 +46,8 @@ public class Post {
     @Column(nullable = false)
     private PostStatus status;
 
+    private String imageUrl;
+
     @CreationTimestamp
     private LocalDateTime creationDate;
 
