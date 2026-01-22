@@ -4,8 +4,8 @@ import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 
-import com.project.BlogSystem.auth.model.entity.AuthUser;
 import com.project.BlogSystem.post.model.enums.PostStatus;
+import com.project.BlogSystem.profile.model.Profile;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -34,7 +34,7 @@ public class Post {
 
     @ManyToOne
     @JoinColumn(name = "author_id", nullable = false)
-    private AuthUser author;
+    private Profile author;
 
     @Column(nullable = false)
     private String title;

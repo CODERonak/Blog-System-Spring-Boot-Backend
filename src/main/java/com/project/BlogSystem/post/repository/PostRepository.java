@@ -17,7 +17,7 @@ Post repository includes methods -
 
 * findByStatus(PostStatus status, Pageable pageable): Returns posts based on PostStatus(DRAFT, PUBLISHED, ARCHIVED) for author only
 
-* findByAuthor(String username): Lists posts of particular author based on username
+* findByAuthor_Name(String name): Lists posts of particular author based on username
 
 */
 
@@ -25,6 +25,6 @@ Post repository includes methods -
 public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> findByStatus(PostStatus status, Pageable pageable);
 
-    List<Post> findByAuthor_Username(String username);
+    List<Post> findByAuthor_Name(String name);
 
 }
