@@ -6,6 +6,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.project.BlogSystem.auth.exceptions.*;
+import com.project.BlogSystem.post.exception.InvalidPostStatusException;
+import com.project.BlogSystem.post.exception.PostCreationException;
+import com.project.BlogSystem.post.exception.PostNotFoundException;
+import com.project.BlogSystem.post.exception.UnauthorizedActionException;
 import com.project.BlogSystem.profile.exception.ProfileAlreadyExistsException;
 import com.project.BlogSystem.profile.exception.ProfileNotFoundException;
 
@@ -19,6 +23,13 @@ Auth exceptions includes:
 * EmailAlreadyExistsException
 * InvalidCredentialsException
 * UserNotFoundException
+* ProfileNotFoundException
+* ProfileAlreadyExistsException
+* PostNotFoundException
+* UnauthorizedActionException
+* InvalidPostStatusException
+* PostCreationException
+
 
 */
 @RestControllerAdvice
@@ -75,6 +86,42 @@ public class GlobalExceptionHandler {
                 HttpStatus.CONFLICT.getReasonPhrase(),
                 ex.getMessage());
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(PostNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handlePostNotFoundException(PostNotFoundException ex) {
+        ErrorResponse error = new ErrorResponse(
+                HttpStatus.NOT_FOUND.value(),
+                HttpStatus.NOT_FOUND.getReasonPhrase(),
+                ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(UnauthorizedActionException.class)
+    public ResponseEntity<ErrorResponse> handleUnauthorizedActionException(UnauthorizedActionException ex) {
+        ErrorResponse error = new ErrorResponse(
+                HttpStatus.FORBIDDEN.value(),
+                HttpStatus.FORBIDDEN.getReasonPhrase(),
+                ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(InvalidPostStatusException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidPostStatusException(InvalidPostStatusException ex) {
+        ErrorResponse error = new ErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(PostCreationException.class)
+    public ResponseEntity<ErrorResponse> handlePostCreationException(PostCreationException ex) {
+        ErrorResponse error = new ErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
 }
