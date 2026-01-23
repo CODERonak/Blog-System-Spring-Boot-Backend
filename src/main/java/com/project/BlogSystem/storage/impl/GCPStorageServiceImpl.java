@@ -1,4 +1,4 @@
-package com.project.BlogSystem.post.service.impl;
+package com.project.BlogSystem.storage.impl;
 
 import java.io.IOException;
 
