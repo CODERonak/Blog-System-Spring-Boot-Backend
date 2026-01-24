@@ -3,7 +3,6 @@ package com.project.BlogSystem.post.service.interfaces;
 
 import com.project.BlogSystem.post.dto.PostRequest;
 import com.project.BlogSystem.post.dto.PostResponse;
-import com.project.BlogSystem.post.model.enums.PostStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,6 +15,4 @@ public interface PostService {
     void deletePost(Long postId);
 
     Page<PostResponse> getPostsByUser(String name, Pageable pageable);
-
-    PostResponse changePostStatus(Long postId, PostStatus newStatus);
 }
