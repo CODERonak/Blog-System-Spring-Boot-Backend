@@ -51,9 +51,9 @@ public class SecurityConfig {
                 // authorizes request
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers(
-                            "/auth/**",
-                            "/profile/{username}"
-                        )
+                                "/auth/**",
+                                "/profile/{username}",
+                                "/posts/user/{username}")
                         .permitAll()
                         .anyRequest().authenticated())
 
