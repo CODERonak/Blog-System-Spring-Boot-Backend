@@ -9,12 +9,10 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
 
-  # temparary local db for developement purposes
-  # Google cloud sql will be used during the deployment
+  # Using Cloud SQL
   datasource:
-    url: jdbc:mysql://localhost:3306/BLOG
-    username: myuser
-    password: secret
+    username: ${USERNAME}
+    password: ${PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   security:
@@ -22,9 +20,13 @@ spring:
       name: boot
       password: spring
 
-    # Google cloud storage
+    # Google cloud storage and Cloud SQL
   cloud:
     gcp:
+      sql:
+        enabled: true
+        database-name: ${DB_NAME}
+        instance-connection-name: ${INSTANCE_CONNECTION_NAME}
       project-id: ${GCP-PROJECT-ID}
       credentials:
         location: classpath:gcp/gcp-key.json
