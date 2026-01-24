@@ -1,23 +1,27 @@
+# 📝 Spring Boot Blog System Backend API
+
+A **Blog / Content Platform backend** built with **Spring Boot**, designed as a **Modular Monolith** with **strict domain isolation**, **SOLID principles**, and **Clean Architecture**.
+
+The system is designed for **clear domain boundaries**, and **future microservice extraction**, while remaining a **single deployable application** on **Google Cloud Platform (GCP)**.
 
 ---
 
-# 📝 Spring Boot Blog Platform Backend API
+## ✨ Core Features & Technology
 
-A **Blog / Content Platform backend** built with **Spring Boot**, designed as a **Modular Monolith** with **strict domain isolation**, **SOLID principles**, **Clean Architecture**.
-
-This project emphasizes **long-term maintainability**, **scalability**, and **correctness**, while remaining deployable as a **single application** to **Google Cloud Platform (GCP)**, utilizing **Cloud Storage** for media and **Cloud SQL** for the database.
-
+*   **Authentication**: Secure user access with **JWT (JSON Web Token)** based authentication.
+*   **Deployment**: Ready for production on **Google Cloud Platform (GCP)**.
+*   **Database**: Utilizes **Cloud SQL** for a managed, relational database service.
+*   **File Storage**: Leverages **Google Cloud Storage** for scalable and secure file handling.
 
 ---
 
 ## 🎯 Project Goals
 
-* Build a **production-ready backend** using Spring Boot
 * Enforce **strong modular boundaries** inside a monolith
-* Apply **SOLID principles** at module and service levels
+* Apply **SOLID principles** consistently
 * Ensure **correctness under concurrent access**
-* Optimize read-heavy workloads with **Redis caching**
-* Design the system to be **microservice-extractable later**
+* Remain deployable as **one JAR**
+* Be **microservice-extractable later**
 
 ---
 
@@ -27,13 +31,13 @@ This project emphasizes **long-term maintainability**, **scalability**, and **co
 
 * Single deployable application (**one JAR**)
 * Strong internal module boundaries
-* Each module owns **one business domain**
+* Each module owns **exactly one business domain**
 * **No shared database tables** across modules
 * Inter-module communication **only via interfaces**
-* No direct entity or repository sharing
+* No entity, repository, or transaction sharing
 
-> This is **not** a “large package with folders”.  
-> This is a **well-structured system** that can be safely split later.
+> This is **not** a package-based monolith.
+> This is a **domain-isolated system**.
 
 ---
 
@@ -41,26 +45,10 @@ This project emphasizes **long-term maintainability**, **scalability**, and **co
 
 * A module **cannot** access another module’s repository
 * A module **cannot** access another module’s entities
-* Cross-module interaction happens **only via public service interfaces**
+* Cross-module interaction **only via public service interfaces**
 * Controllers talk **only** to their own module
 * DTOs never leak entities
 * Infrastructure code never leaks into domain logic
-
-Violating these rules breaks modularity.
-
----
-
-## 🧩 Key Engineering Principles
-
-* **Single Responsibility Principle (SRP)** — one business capability per module
-* **Open/Closed Principle (OCP)** — extend behavior via new services
-* **Liskov Substitution Principle (LSP)** — interchangeable service implementations
-* **Interface Segregation Principle (ISP)** — small, module-level interfaces
-* **Dependency Inversion Principle (DIP)** — controllers depend on interfaces
-* DTOs at system boundaries
-* Service-layer business logic
-* Repository abstraction with JPA
-* Centralized exception handling
 
 ---
 
@@ -71,45 +59,39 @@ Violating these rules breaks modularity.
 * **Spring Web**
 * **Spring Data JPA**
 * **Spring Security**
-* **MySQL**
-* **Redis**
-* **BCrypt Password Hashing**
+* **MySQL (Cloud SQL)**
+* **BCrypt**
 * **Spring Validation**
 * **Spring Actuator**
 * **Docker / Docker Compose**
+* **Google Cloud Storage**
 
 ---
 
-## 🗂️ High-Level Module Map
+## 🗂️ High-Level Module Map (Corrected)
 
 ```
-
 com.example.blog
 │
-├── common        (shared kernel, very small)
 ├── auth          (authentication & identity)
-├── users         (user profiles)
+├── profile       (user profile data)
 ├── posts         (posts & publishing)
-├── comments      (commenting system)
-├── media         (file metadata & storage abstraction)
-├── cache         (Redis abstractions)
+├── storage       (GCP file storage)
 └── BlogApplication.java
-
 ```
 
-Only `common` is shared.  
-All other modules are **fully isolated**.
+✔ No shared kernel
+✔ All modules are isolated
+✔ Communication via interfaces only
 
 ---
 
-## 🧱 Internal Module Structure
+## 🧱 Internal Module Structure (Standardized)
 
-Each module follows the **same internal architecture**:
+Each module follows the same internal structure:
 
 ```
-
 module-name/
-├── api           (DTOs + public interfaces)
 ├── controller    (REST endpoints)
 ├── service
 │   ├── interfaces
@@ -120,33 +102,13 @@ module-name/
 │   └── enums
 ├── mapper
 └── exception
-
 ```
 
-This consistency is intentional and team-scalable.
+This structure is **mandatory and consistent**.
 
 ---
 
-## 🔐 Security Model
-
-### Phase 1 — Session-Based Authentication
-
-* Stateful session-based authentication
-* Spring Security–managed sessions
-* BCrypt password hashing
-* Role-Based Access Control (RBAC)
-* CSRF enabled
-
-### Phase 2 — JWT + Redis (Planned)
-
-* Stateless authentication
-* JWT access tokens
-* Redis-backed token blacklist
-* Rate limiting counters
-
----
-
-## 👥 User Roles
+## 👥 User Roles (Unchanged)
 
 * `ADMIN`
 * `AUTHOR`
@@ -154,26 +116,32 @@ This consistency is intentional and team-scalable.
 
 ---
 
-## 🔒 Authorization Rules (High-Level)
+## 🔐 Security Model
 
-| Capability                | Role Requirement            |
-|--------------------------|-----------------------------|
-| Register / Login         | Public                      |
-| Create Post              | AUTHOR                      |
-| Edit Own Post            | AUTHOR                      |
-| Edit Any Post            | ADMIN                       |
-| Publish Post             | AUTHOR                      |
-| Comment                  | USER, AUTHOR, ADMIN         |
-| Moderate Content         | ADMIN                       |
+### Authentication
+
+* **JWT-based authentication**
+* Managed by Spring Security
+* BCrypt password hashing
+
+### Authorization
+
+* Role-Based Access Control (RBAC)
+* Ownership validation enforced in services
+* Method-level security
 
 ---
 
-## 🔑 Authentication Endpoints
+## 🔒 Authorization Rules
 
-| Method | Endpoint         | Description           | Access |
-|------|------------------|----------------------|--------|
-| POST | `/auth/register` | Register new user     | Public |
-| POST | `/auth/login`    | Login (session-based)| Public |
+| Capability       | Role Requirement |
+| ---------------- | ---------------- |
+| Register / Login | Public           |
+| Create Post      | AUTHOR           |
+| Edit Own Post    | AUTHOR           |
+| Edit Any Post    | ADMIN            |
+| Publish Post     | AUTHOR           |
+| View Posts       | Public           |
 
 ---
 
@@ -181,205 +149,120 @@ This consistency is intentional and team-scalable.
 
 ---
 
-### 🟢 Phase 0 – System Initialization
-
-* Spring Boot project setup
-* Database & Redis configuration
-* Modular package structure
-* Health check verification
-
-**Status**
-* ✅ Application starts correctly
-* ✅ Database connectivity verified
-* ✅ Redis connectivity verified
-
----
-
-### 🟢 Phase 1 – Authentication & Identity (Auth Module)
+### 🟢 Phase 1 — Authentication (Auth Module)
 
 #### Auth Domain Model
 
 * Email (unique)
 * BCrypt-hashed password
-* Role-based access
-* Account enabled flag
-* Creation timestamp
+* Role
 
-**Key Concepts**
-* Authentication vs Authorization
-* Session lifecycle
-* Thread-local `SecurityContext`
+**Responsibilities**
+
+* User registration and login.
+* Manages authentication and sessions.
+* Defines user roles (`ADMIN`, `AUTHOR`, `USER`).
 
 ---
 
-### 🟢 Phase 2 – User Profiles (Users Module)
+### 🟢 Phase 2 — User Profiles (Profile Module)
 
-Auth and user profile are **separate concerns**.
+#### Profile Entity
 
-#### User Profile Entity
-
-* Reference to Auth user via ID
+* Reference to user account via ID
 * Display name
 * Bio
-* Creation & update timestamps
+* Avatar URL
 
-**Rule**
-* Users module stores `authUserId`, not Auth entities
-* Auth is accessed only via `AuthService`
+**Separation**
+
+* Manages user profiles.
+* Allows users to view and update their profiles.
 
 ---
 
-### 🟢 Phase 3 – Posts & Publishing (Core Domain)
+### 🟢 Phase 3 — Posts & Publishing (Posts Module)
 
 #### Post Entity
 
-* Author reference via Auth user ID
-* Title & content
-* Status lifecycle (`DRAFT → PUBLISHED → ARCHIVED`)
-* Timestamps
+* Author reference via user ID
+* Title
+* Content
+* Status (`DRAFT`, `PUBLISHED`, `ARCHIVED`)
+* Creation & update timestamps
 
-#### Key Features
+#### Business Rules
 
-* Role-based post creation
-* Ownership validation
-* Pagination mandatory
-* Indexed queries
-* Status-based filtering
-
-**CS Fundamentals**
-* Pagination vs offset cost
-* Index usage
-* Transaction boundaries
+* Handles the creation, updating, deletion, and retrieval of posts.
+* Includes functionality for image uploads with posts.
 
 ---
 
-### 🟢 Phase 4 – Commenting System
+### 🟢 Phase 4 — File Storage (Storage Module)
 
-#### Comment Model
+#### Storage Responsibilities
 
-* Self-referencing (parent-child)
-* Max depth = 3
-* Soft delete only
-* No cascade deletes
+* Upload files to **Google Cloud Storage**
+* Generate public or signed URLs
+* Store file metadata
 
-**Key Concepts**
-* Tree structures
-* Recursive reads
-* N+1 query prevention
+**Abstraction**
 
----
-
-### 🟢 Phase 5 – Caching Layer (Redis)
-
-Cache is a **dedicated module**, not scattered annotations.
-
-#### Cache Use Cases
-
-| Data         | Redis Key        | TTL     |
-|--------------|------------------|---------|
-| Post pages   | `posts:page:{n}` | 5 min   |
-| Single post  | `post:{id}`      | 10 min  |
-| User profile | `user:{id}`      | 15 min  |
-
-**Pattern**
-* Cache-aside
-* Explicit invalidation
-* TTL-based eviction
+* Handles file storage, specifically for post images.
+* Interacts with Google Cloud Storage.
 
 ---
 
-### 🟢 Phase 6 – Media Management
-
-#### Media Entity
-
-* Owner reference
-* File path
-* Media type (IMAGE / VIDEO)
-* Creation timestamp
-
-#### Storage Abstraction
-
-* Local filesystem (Phase 1)
-* Cloud storage (S3 / GCS) later
-* No API changes required
+## 📡 REST API Endpoints (All Modules)
 
 ---
 
-### 🟢 Phase 7 – Security Upgrade (Planned)
+### 🔐 Auth Module
 
-* Stateless JWT authentication
-* Redis-backed token blacklist
-* Rate limiting
-* Replay attack mitigation
+| Method | Endpoint         | Description           | Access |
+| ------ | ---------------- | --------------------- | ------ |
+| POST   | `/auth/register` | Register new user     | Public |
+| POST   | `/auth/login`    | Login (session-based) | Public |
 
 ---
 
-## ⚙️ System Design Fundamentals
+### 🧾 Profile Module
 
-### Data Relationships
+| Method | Endpoint                     | Description        | Access |
+| ------ | ---------------------------- | ------------------ | ------ |
+| GET    | `/profile/{username}`        | Get public profile | Public |
+| PUT    | `/profile/update/{username}` | Update own profile | Auth   |
 
-* Auth → Users (1:1 via ID)
-* Users → Posts (1:N)
-* Posts → Comments (1:N)
-* Users → Media (1:N)
+---
 
-### Transaction Strategy
+### 📝 Posts Module
 
-* Service layer = transaction boundary
-* Writes are transactional
-* Reads optimized and cached
-
-### Scalability Model
-
-* Stateless application
-* Horizontal scaling
-* Shared Redis cache
-* DB read replicas later
+| Method | Endpoint                 | Description       | Access         |
+| ------ | ------------------------ | ----------------- | -------------- |
+| POST   | `/posts`                 | Create post       | AUTHOR         |
+| PUT    | `/posts/update/{postId}` | Edit post         | AUTHOR / ADMIN |
+| DELETE | `/posts/delete/{postId}` | Delete post       | AUTHOR / ADMIN |
+| GET    | `/posts/user/{username}` | List user's posts | Public         |
 
 ---
 
 ## 🧪 Testing Strategy
 
-| Level       | Scope             | Tools               |
-|------------|-------------------|---------------------|
-| Unit       | Service logic     | JUnit, Mockito      |
-| Module     | Module isolation  | Testcontainers      |
-| Integration| Cross-module      | SpringBootTest      |
-| Load       | Read-heavy paths  | k6                  |
-| Security   | Auth flows        | Manual + OWASP      |
-
----
-
-## 📊 Actuator Endpoints
-
-| Endpoint            | Description               |
-|---------------------|---------------------------|
-| `/actuator/health`  | Application health        |
-| `/actuator/metrics` | JVM & application metrics |
+| Level       | Scope            | Tools          |
+| ----------- | ---------------- | -------------- |
+| Unit        | Service logic    | JUnit, Mockito |
+| Module      | Isolation tests  | Testcontainers |
+| Integration | End-to-end flows | SpringBootTest |
+| Security    | Auth & RBAC      | Manual / OWASP |
 
 ---
 
 ## 🐳 Deployment
 
-* Deployed to Google Cloud Platform
-* Google Cloud Storage for media files
-* Google Cloud SQL for database
-
-
----
-
-## ✅ Final Summary
-
-This Blog Platform backend is:
-
-* ✅ Strictly modular
-* ✅ SOLID-compliant
-* ✅ Redis-enabled
-* ✅ Security-aware
-* ✅ System-design driven
-* ✅ Ready to scale or split into microservices
-
-**This is not a demo project.  
-This is a foundation for real systems.**
+* Dockerized Spring Boot application
+* Deployed to **Google Cloud Platform**
+* **JWT-based authentication** is used.
+* **Cloud SQL** for MySQL
+* **Google Cloud Storage** for files
 
 ---
