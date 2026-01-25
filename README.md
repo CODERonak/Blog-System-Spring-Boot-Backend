@@ -1,3 +1,54 @@
+# 🚀 Deployed Project
+
+The project has been deployed and is available for testing.
+
+*   **Deployed Link:** [https://blog-service-728516377302.us-central1.run.app](https://blog-service-728516377302.us-central1.run.app)
+*   **Postman Collection:** [https://www.postman.com/flight-technologist-23919603/mono/request/42910295-c0e683d6-78a0-474d-b0dc-18ee5e18bbac?tab=body](https://www.postman.com/flight-technologist-23919603/mono/request/42910295-c0e683d6-78a0-474d-b0dc-18ee5e18bbac?tab=body)
+
+### 🔑 API Usage
+
+1.  **Generate a Token:** Use the "register" or "login" endpoint to get an authentication token.
+2.  **Authorization:** In Postman, go to the "Authorization" tab and select "Bearer Token". Paste the generated token in the "Token" field.
+3.  **Access Protected Endpoints:** You can now use this token to access the "profile" and "posts" endpoints.
+
+**CAUTION:** Do not use your real username, email, or password. Use dummy data for testing.
+
+### 📝 JSON Examples
+
+#### Register
+
+```json
+{
+  "username": "sam_reader",
+  "password": "UserPass456",
+  "email": "sam.jones@webmail.com",
+  "role": "AUTHOR"
+}
+```
+
+#### Login
+
+Use the `username` and `password` from the registration to log in.
+
+#### Profile
+
+```json
+{
+  "name": "Sam Reader",
+  "bio": "I love reading books and articles on a wide range of topics, from history and philosophy to the latest trends in technology."
+}
+```
+
+#### Posts
+
+```json
+{
+    "title": "Mastering CSS Grid Layout",
+    "content": "CSS Grid Layout is a powerful two-dimensional layout system that allows you to create complex and responsive web layouts with ease. This tutorial will take you from the basics of creating a grid container to advanced topics like grid template areas, aligning items, and creating responsive designs with media queries. We'''ll build a practical example of a photo gallery to solidify your understanding. Say goodbye to float hacks and complex positioning!",
+    "status": "PUBLISHED"
+  }
+```
+
 # 📝 Spring Boot Blog System Backend API
 
 A **Blog / Content Platform backend** built with **Spring Boot**, designed as a **Modular Monolith** with **strict domain isolation**, **SOLID principles**, and **Clean Architecture**.
