@@ -1,5 +1,7 @@
 # 🚀 Deployed Project
 
+**FOR NOW LINK IS UNAVAILABLE**
+
 The project has been deployed and is available for testing.
 
 *   **Deployed Link:** [https://blog-service-728516377302.us-central1.run.app](https://blog-service-728516377302.us-central1.run.app)
